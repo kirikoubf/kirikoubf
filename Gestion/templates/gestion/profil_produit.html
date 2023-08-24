@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profil produit</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00bfff;
+            font-family: "Arial", sans-serif;
+        }
+
+        .product-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 100px;
+        }
+
+        .product-container img {
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-info {
+            margin-bottom: 20px;
+        }
+
+        .product-info label {
+            font-weight: bold;
+            color: #00bfff; /* Couleur bleu ciel pour les titres des informations */
+            font-family: "Arial", sans-serif;
+        }
+
+        .product-info span {
+            display: inline-block;
+            margin-left: 10px;
+            color: #333;
+            font-family: "Arial", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <h1>Profil du produit</h1>
+
+        <div class="product-info">
+            <label>Nom:</label>
+            <span>{{ produit.Name }}</span>
+        </div>
+
+        <div class="product-info">
+            <label>ID:</label>
+            <span>{{ produit.Id }}</span>
+        </div>
+
+        <div class="product-info">
+            <label>Description:</label>
+            <span>{{ produit.Description }}</span>
+        </div>
+
+        <div class="product-info">
+            <label>Prix:</label>
+            <span>{{ produit.Prix }}</span>
+        </div>
+
+        <div class="product-info">
+            <label>Quantité:</label>
+            <span>{{ produit.Quantite }}</span>
+        </div>
+
+        <div class="product-info">
+            <label>Date ajoutée:</label>
+            <span>{{ produit.date_added }}</span>
+        </div>
+    </div>
+</body>
+</html>

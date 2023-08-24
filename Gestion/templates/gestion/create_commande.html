@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajouter commande</title>
+  <style>
+    /* Styles pour le formulaire */
+    body {
+      background-color: #f4f4f4; /* Couleur de fond légèrement grise */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Hauteur de l'écran */
+      margin: 0; /* Supprimer la marge par défaut du corps */
+      font-family: Arial, sans-serif; /* Police de caractères */
+    }
+
+    .container {
+      background-color: #ffffff; /* Couleur de fond blanc */
+      border-radius: 10px; /* Bords arrondis */
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+      padding: 20px; /* Espacement interne */
+      margin-top: 50px;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #4a90e2; /* Couleur bleue pour le titre */
+      margin-bottom: 20px; /* Espacement sous le titre */
+    }
+
+    .container label {
+      margin-left: 5px; /* Espacement à gauche pour les étiquettes */
+      color: #333; /* Couleur de texte sombre */
+    }
+
+    .container input,
+    .container select {
+      display: block;
+      margin-bottom: 10px;
+      width: 95%; /* Largeur du champ */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .container div {
+      margin-bottom: 15px; /* Espacement sous les champs de sélection */
+    }
+
+    .container button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4a90e2; /* Couleur bleue pour le bouton */
+      color: #fff; /* Couleur de texte blanche */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Commande</h2>
+    <form method="POST">
+      {% csrf_token %} <!-- Jeton CSRF pour sécurité -->
+      <label for="nom">Nom :</label>
+      <input type="text" name="nom" placeholder="Nom" maxlength="15" required>
+      <label for="prenom">Prenom :</label>
+      <input type="text" name="prenom" placeholder="Prenom" maxlength="20" required>
+      <label for="telephone">Telephone :</label>
+      <input type="text" name="telephone" placeholder="Telephone" maxlength="15" required>
+      <label for="lieu">Lieu :</label>
+      <input type="text" name="lieu" placeholder="Lieu" maxlength="15" required>
+
+      <div>
+        <label for="produit">Produit :</label>
+        <select name="produit" >
+          {% for produit in produits %}
+            <option value="{{ produit.Id }}">{{ produit.Id }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div>
+        <label for="quantite">Quantite :</label>
+        <input type="number" name="quantite" placeholder="Quantite" value="1" required>
+      </div>
+
+      <label for="rabais">Rabais :</label>
+      <input type="number" name="rabais" placeholder="Rabais" required>
+
+      <div>
+        <label for="statut">Statut :</label>
+        <select name="statut" required>
+          <option value="non livre">Non livré</option>
+          <option value="livre">Livre</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="payer">Payer ? :</label>
+        <select name="payer" required>
+          <option value="NON">NON</option>
+          <option value="OUI">OUI</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="livreur">Livreur :</label>
+        <select name="livreur" required>
+          {% for user in users %}
+            <option value="{{ user.get_full_name }}">{{ user.get_full_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit">Enregistrer</button>
+    </form>
+  </div>
+</body>
+</html>

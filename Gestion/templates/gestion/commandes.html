@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Commandes</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        th {
+            background-color: red;
+            color: white;
+            text-align: center;
+        }
+
+        .status-non-livre {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-livre {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-annule {
+            color: gray;
+            font-weight: bold;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .create-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modify-link {
+            background-color: red;
+            color: white;
+            border-radius: 4px;
+            display: inline-block;
+            height: 90%;
+            line-height: 100%;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .modify-link:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Liste des Commandes</h1>
+        <a href="{% url 'creer_commande' %}" style="margin-right: 50px;" class="create-button">Créer</a>
+    </div>
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Téléphone</th>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Montant</th>
+            <th>Rabais</th>
+            <th>Total</th>
+            <th>Lieu</th>
+            <th>Statut</th>
+            <th>Payer?</th>
+            <th>Livreur</th>
+            <th>Date et heure</th>
+            <th>Actions</th>
+        </tr>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{commande.No}}</td>
+                <td>{{commande.Nom}}</td>
+                <td>{{commande.Prenom}}</td>
+                <td>{{commande.Telephone}}</td>
+                <td>{{commande.Produit}}</td>
+                <td>{{commande.Quantite}}</td>
+                <td>{{commande.Montant}}</td>
+                <td>{{commande.Rabais}}</td>
+                <td>{{commande.Total}}</td>
+                <td>{{commande.Lieu}}</td>
+                <td>{{commande.Statut}}</td>
+                <td>{{commande.Payer}}</td>
+                <td>{{commande.Livreur}}</td>
+                <td>{{commande.date_et_heure}}</td>
+                <td>
+                    <a href="{% url 'modifier_commande' commande.No %}" class="modify-link">Modifier</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

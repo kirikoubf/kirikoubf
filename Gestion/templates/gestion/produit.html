@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Produits</title>
+    <style>
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product {
+            margin: 0;
+            padding: 0;
+            width: 22%;
+            height: 300px;
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 10px;
+            cursor: pointer; /* Ajout de la propriété pour indiquer que le produit est cliquable */
+        }
+
+        .product img {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 10px;
+        }
+        .img {
+            width: 100%;
+            height: 90%;
+            margin: 0;
+            padding: 0;
+        }
+        p {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        span {
+            color: red;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .create-button {
+            background-color: #00bfff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .create-button:hover{
+            background-color: #0084ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="margin-left:5%">Stock</h1>
+        <a href="{% url 'creer_produit' %}" style="margin-right: 50px;" class="create-button">Créer</a>
+    </div>
+    <div class="product-container">
+        {% for produit in produits%}
+            <a href="{% url 'profil_produit' produit.Id %}" style="text-decoration:none; color:black;" class="product"> <!-- Ajout du lien vers la page de profil du produit -->
+                <div class="img">
+                    <img src="{{ produit.Image.url }}" alt="Image du produit">
+                </div>
+                <p style="color:#00bfff; padding-top:5px;">{{ produit.Id}}</p>
+                <p>Stock <span>{{ produit.Quantite }}</span></p>
+            </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

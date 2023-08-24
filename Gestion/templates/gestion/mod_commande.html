@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Modifier</title>
+  <style>
+    body {
+      background-color: #87CEEB; /* Couleur de fond bleu clair */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120vh; /* Hauteur de l'écran */
+    }
+
+    .container {
+      background-color: #ffffff; /* Couleur de fond blanc */
+      border-radius: 10px; /* Bords arrondis */
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+     }
+
+    .container h2 {
+      text-align: center;
+    }
+
+    .container input,
+    .container select {
+      display: block;
+      margin-bottom: 10px;
+      width: 85%;
+      margin-left: 5%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    label{
+      margin-left:5%;
+    }
+    .container button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Modifier la commande de Mr/mme {{ commande.Nom }}</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <label for="telephone">Telephone :</label>
+      <input type="text" name="telephone" placeholder="Telephone" value="{{ commande.Telephone }}" required>
+
+      <label for="statut">Statut :</label>
+      <select name="statut" required>
+        <option value="non livre" {% if commande.Statut == "non livre" %}selected{% endif %}>Non livré</option>
+        <option value="livre" {% if commande.Statut == "livre" %}selected{% endif %}>Livre</option>
+        <option value="Annule" {% if commande.Statut == "Annule" %}selected{% endif %}>Annulé</option>
+      </select><br>
+
+      <label for="Payer">Payer ? :</label>
+      <select name="payer" required>
+        <option value="NON" {% if commande.Payer == "NON" %}selected{% endif %}>NON</option>
+        <option value="OUI" {% if commande.Payer == "OUI" %}selected{% endif %}>OUI</option>
+      </select><br>
+      
+
+      <label for="livreur">Livreur :</label>
+      <select name="livreur" required>
+        {% for user in users %}
+          <option value="{{ user.get_full_name }}" {% if user.get_full_name == commande.Livreur %}selected{% endif %}>{{ user.get_full_name }}</option>
+        {% endfor %}
+      </select><br>
+
+      <button type="submit">Enregistrer</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajouter depense</title>
+  <style>
+    /* Styles pour le formulaire */
+    body {
+      background-color: #f4f4f4; /* Couleur de fond légèrement grise */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Hauteur de l'écran */
+      margin: 0; /* Supprimer la marge par défaut du corps */
+      font-family: Arial, sans-serif; /* Police de caractères */
+    }
+
+    .container {
+      background-color: #ffffff; /* Couleur de fond blanc */
+      border-radius: 10px; /* Bords arrondis */
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+      padding: 20px; /* Espacement interne */
+      margin-top: 50px;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #4a90e2; /* Couleur bleue pour le titre */
+      margin-bottom: 20px; /* Espacement sous le titre */
+    }
+
+    .container label {
+      margin-left: 5px; /* Espacement à gauche pour les étiquettes */
+      color: #333; /* Couleur de texte sombre */
+    }
+
+    .container input,
+    .container select,
+    .container textarea { /* Ajout du style pour textarea */
+      display: block;
+      margin-bottom: 10px;
+      width: 95%; /* Largeur du champ */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .container div {
+      margin-bottom: 15px; /* Espacement sous les champs de sélection */
+    }
+
+    .container button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4a90e2; /* Couleur bleue pour le bouton */
+      color: #fff; /* Couleur de texte blanche */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Depense</h2>
+    <form method="POST">
+      {% csrf_token %} <!-- Jeton CSRF pour sécurité -->
+      <div>
+        <label for="motif">Motif :</label>
+        <input type="text" id="motif" name="motif" required>
+      </div>
+      <div>
+        <label for="montant">Montant :</label>
+        <input type="number" id="montant" name="montant" required>
+      </div>
+      <div>
+        <button type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

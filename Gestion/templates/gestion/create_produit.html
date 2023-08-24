@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajouter produit</title>
+  <style>
+    /* Styles pour le formulaire */
+    body {
+      background-color: #f4f4f4; /* Couleur de fond légèrement grise */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Hauteur de l'écran */
+      margin: 0; /* Supprimer la marge par défaut du corps */
+      font-family: Arial, sans-serif; /* Police de caractères */
+    }
+
+    .container {
+      background-color: #ffffff; /* Couleur de fond blanc */
+      border-radius: 10px; /* Bords arrondis */
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+      padding: 20px; /* Espacement interne */
+      margin-top: 50px;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #4a90e2; /* Couleur bleue pour le titre */
+      margin-bottom: 20px; /* Espacement sous le titre */
+    }
+
+    .container label {
+      margin-left: 5px; /* Espacement à gauche pour les étiquettes */
+      color: #333; /* Couleur de texte sombre */
+    }
+
+    .container input,
+    .container select,
+    .container textarea { /* Ajout du style pour textarea */
+      display: block;
+      margin-bottom: 10px;
+      width: 95%; /* Largeur du champ */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .container div {
+      margin-bottom: 15px; /* Espacement sous les champs de sélection */
+    }
+
+    .container button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4a90e2; /* Couleur bleue pour le bouton */
+      color: #fff; /* Couleur de texte blanche */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Formulaire</h2>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %} <!-- Jeton CSRF pour sécurité -->
+      <div>
+        <label for="name">Nom :</label>
+        <input type="text" id="name" name="name" maxlength="15" required>
+      </div>
+      <div>
+        <label for="description">Description :</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div>
+        <label for="prix">Prix :</label>
+        <input type="number" id="prix" name="prix" required>
+      </div>
+      <div>
+        <label for="quantite">Quantité :</label>
+        <input type="number" id="quantite" name="quantite" required>
+      </div>
+      <div>
+        <label for="id">ID :</label>
+        <input type="text" id="id" name="id" required>
+      </div>
+      <div>
+        <label for="image">Image :</label>
+        <input type="file" id="image" name="image" required>
+      </div>
+      <div>
+        <button type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

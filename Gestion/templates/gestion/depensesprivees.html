@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Depenses privee</title>
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .create-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        th {
+            background-color: red;
+            color: white;
+        }
+        span {
+            font-weight: bold;
+        }
+        h1 {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Liste des depenses privees</h1>
+        <a href="{% url 'creer_depense_privee' %}" style="margin-right: 50px;" class="create-button">Ajouter</a>
+    </div>
+    <table>
+        <tr>
+            <th>Motif</th>
+            <th>Montant</th>
+            <th>Date</th>
+        </tr>
+            {% for depenseprivee in depensesprivees %}
+                <tr>
+                    <td><span style="color:red;">{{ depenseprivee.Motif }}</span></td>
+                    <td>{{ depenseprivee.Montant}} FCFA</td>
+                    <td>{{ depenseprivee.date_added}}</td>
+                </tr>
+            {% endfor %}
+    </table>
+</body>
+</html>

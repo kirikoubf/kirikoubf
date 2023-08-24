@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajouter utilisateur</title>
+  <style>
+    /* Styles pour le formulaire */
+    body {
+      background-color: #f4f4f4; /* Couleur de fond légèrement grise */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* Hauteur de l'écran */
+      margin: 0; /* Supprimer la marge par défaut du corps */
+      font-family: Arial, sans-serif; /* Police de caractères */
+    }
+
+    .container {
+      background-color: #ffffff; /* Couleur de fond blanc */
+      border-radius: 10px; /* Bords arrondis */
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+      padding: 20px; /* Espacement interne */
+      margin-top: 50px;
+    }
+
+    .container h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #4a90e2; /* Couleur bleue pour le titre */
+      margin-bottom: 20px; /* Espacement sous le titre */
+    }
+
+    .container label {
+      margin-left: 5px; /* Espacement à gauche pour les étiquettes */
+      color: #333; /* Couleur de texte sombre */
+    }
+
+    .container input,
+    .container select,
+    .container textarea {
+      display: block;
+      margin-bottom: 10px;
+      width: 95%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .container div {
+      margin-bottom: 15px;
+    }
+
+    .container input[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4a90e2; /* Couleur bleue pour le bouton */
+      color: #fff; /* Couleur de texte blanche */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Création d'utilisateur</h2>
+    <form method="POST" action="/create_user">
+      {% csrf_token %}
+      <div>
+        <label for="nom">Nom :</label>
+        <input type="text" name="nom" maxlength="15" required>
+      </div>
+      <div>
+        <label for="prenom">Prénom :</label>
+        <input type="text" name="prenom" maxlength="20" required>
+      </div>
+      <div>
+        <label for="telephone1">Téléphone 1 :</label>
+        <input type="text" name="telephone1" maxlength="15" required>
+      </div>
+      <div>
+        <label for="telephone2">Téléphone 2 :</label>
+        <input type="text" name="telephone2" maxlength="15">
+      </div>
+      <div>
+        <label for="email">Email :</label>
+        <input type="email" name="email" required>
+      </div>
+      <div>
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" name="username" maxlength="15" required>
+      </div>
+      <div>
+        <label for="password">Mot de passe :</label>
+        <input type="password" name="password" required>
+      </div>
+      <div>
+        <label for="statut">Statut :</label>
+        <select name="statut" required>
+          <option value="livreur">livreur</option>
+          <option value="gerant">gerant</option>
+          <option value="superadmin">superadmin</option>
+        </select>
+      </div>
+      <div>
+        <input type="submit" value="Créer">
+      </div>
+    </form>
+  </div>
+</body>
+</html>

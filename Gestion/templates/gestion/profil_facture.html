@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facture</title>
+    <style>
+        /* Styles pour la facture */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .facture {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .facture-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .facture-header h1 {
+            font-size: 24px;
+        }
+
+        .facture-info {
+            margin-bottom: 20px;
+            /* Définir la propriété column-count pour afficher deux balises <p> par ligne */
+            column-count: 2;
+            column-gap: 30px; /* Ajouter un espacement entre les colonnes */
+        }
+
+        .facture-info p {
+            margin: 5px 0;
+        }
+
+        .facture-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .facture-table th,
+        .facture-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .facture-table th {
+            background-color: #f2f2f2;
+        }
+
+        .facture-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .facture-total {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .facture-total span {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .invoice-number {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-number">
+        Facture n° {{ facture.No }} <!-- Remplacez "numero_facture" par la variable contenant le numéro de la facture -->
+    </div>
+
+    <div class="facture">
+        <div class="facture-header">
+            <h1>Facture N° {{ facture.No }}</h1>
+            <span>{{ facture.date_et_heure }}</span>
+        </div>
+        <div class="facture-info">
+            <p><span>Nom:</span> {{ facture.Nom }}</p>
+            <p><span>Prénom:</span> {{ facture.Prenom }}</p>
+            <p><span>Téléphone:</span> {{ facture.Telephone }}</p>
+            <p><span>Lieu:</span> {{ facture.Lieu }} </p>
+            <p><span>Livreur:</span> {{ facture.Livreur }} </p>
+            <!-- Ajoutez d'autres informations de la facture ici -->
+        </div>
+        <table class="facture-table">
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Montant</th>
+                <th>Rabais</th>
+            </tr>
+
+            <tr>
+                <td>{{ facture.Produit }}</td>
+                <td>{{ facture.Quantite }}</td>
+                <td>{{ facture.Montant }} FCFA</td>
+                <td>{{ facture.Rabais }} FCFA</td>
+            </tr>
+
+        </table>
+        <div class="facture-total">
+            <span>Total: {{ facture.Total }} FCFA</span>
+        </div>
+    </div>
+</body>
+</html>

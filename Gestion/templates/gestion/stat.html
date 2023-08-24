@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Statistique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+        h2 {
+
+        }
+        button {
+            width: 85px;
+            height: 45px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo"><h2>Kirikoubf</h2></div>
+        <div class="buttons">
+            <button onclick="window.location.href='/'">Acceuil</button>
+            <button onclick="window.location.href='/commandes'">Cmd</button>
+        </div>
+    </div>
+    <div class="container">
+        {% for product in products_sold %}
+            <p>{{ product.Produit__Name }} - Mois {{ product.date_et_heure__month }} : {{ product.total_sold }}</p>
+        {% endfor %}
+
+    </div>
+</body>
+</html>
