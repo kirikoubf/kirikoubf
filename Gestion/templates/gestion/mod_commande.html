@@ -3,12 +3,15 @@
 <head>
   <title>Modifier</title>
   <style>
+    /* Styles pour le formulaire */
     body {
-      background-color: #87CEEB; /* Couleur de fond bleu clair */
+      background-color: #f4f4f4; /* Couleur de fond légèrement grise */
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 120vh; /* Hauteur de l'écran */
+      height: 90vh; /* Hauteur de l'écran */
+      margin: 0; /* Supprimer la marge par défaut du corps */
+      font-family: Arial, sans-serif; /* Police de caractères */
     }
 
     .container {
@@ -16,34 +19,43 @@
       border-radius: 10px; /* Bords arrondis */
       width: 400px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
-     }
+      padding: 20px; /* Espacement interne */
+      margin-top: 50px;
+    }
 
     .container h2 {
       text-align: center;
+      font-weight: bold;
+      color: #4a90e2; /* Couleur bleue pour le titre */
+      margin-bottom: 20px; /* Espacement sous le titre */
+    }
+
+    .container label {
+      margin-left: 5px; /* Espacement à gauche pour les étiquettes */
+      color: #333; /* Couleur de texte sombre */
     }
 
     .container input,
-    .container select {
+    .container select,
+    .container textarea {
       display: block;
       margin-bottom: 10px;
-      width: 85%;
-      margin-left: 5%;
+      width: 95%; /* Largeur du champ */
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-    label{
-      margin-left:5%;
-    }
+
     .container button {
       display: block;
       width: 100%;
       padding: 10px;
-      background-color: #4a90e2;
-      color: #fff;
+      background-color: #4a90e2; /* Couleur bleue pour le bouton */
+      color: #fff; /* Couleur de texte blanche */
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -53,29 +65,36 @@
     <form method="POST">
       {% csrf_token %}
 
-      <label for="telephone">Telephone :</label>
-      <input type="text" name="telephone" placeholder="Telephone" value="{{ commande.Telephone }}" required>
+      <div>
+        <label for="telephone">Telephone :</label>
+        <input type="text" name="telephone" placeholder="Telephone" value="{{ commande.Telephone }}" required>
+      </div>
 
-      <label for="statut">Statut :</label>
-      <select name="statut" required>
-        <option value="non livre" {% if commande.Statut == "non livre" %}selected{% endif %}>Non livré</option>
-        <option value="livre" {% if commande.Statut == "livre" %}selected{% endif %}>Livre</option>
-        <option value="Annule" {% if commande.Statut == "Annule" %}selected{% endif %}>Annulé</option>
-      </select><br>
+      <div>
+        <label for="statut">Statut :</label>
+        <select name="statut" required>
+          <option value="non livre" {% if commande.Statut == "non livre" %}selected{% endif %}>Non livré</option>
+          <option value="livre" {% if commande.Statut == "livre" %}selected{% endif %}>Livre</option>
+          <option value="Annule" {% if commande.Statut == "Annule" %}selected{% endif %}>Annulé</option>
+        </select>
+      </div>
 
-      <label for="Payer">Payer ? :</label>
-      <select name="payer" required>
-        <option value="NON" {% if commande.Payer == "NON" %}selected{% endif %}>NON</option>
-        <option value="OUI" {% if commande.Payer == "OUI" %}selected{% endif %}>OUI</option>
-      </select><br>
-      
+      <div>
+        <label for="Payer">Payer ? :</label>
+        <select name="payer" required>
+          <option value="NON" {% if commande.Payer == "NON" %}selected{% endif %}>NON</option>
+          <option value="OUI" {% if commande.Payer == "OUI" %}selected{% endif %}>OUI</option>
+        </select>
+      </div>
 
-      <label for="livreur">Livreur :</label>
-      <select name="livreur" required>
-        {% for user in users %}
-          <option value="{{ user.get_full_name }}" {% if user.get_full_name == commande.Livreur %}selected{% endif %}>{{ user.get_full_name }}</option>
-        {% endfor %}
-      </select><br>
+      <div>
+        <label for="livreur">Livreur :</label>
+        <select name="livreur" required>
+          {% for user in users %}
+            <option value="{{ user.get_full_name }}" {% if user.get_full_name == commande.Livreur %}selected{% endif %}>{{ user.get_full_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
       <button type="submit">Enregistrer</button>
     </form>

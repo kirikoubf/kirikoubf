@@ -40,9 +40,6 @@ def login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        print("fsdgkxsdfgxsdfkjnxfjnxiejdhsgj",username,"irujgsiohdihgwotgshorhg",password)
-        print(password)
-
         connect_user = login_user(request=request, username=username, password=password)
 
         if not connect_user:
@@ -81,15 +78,22 @@ def acceuil_vendeuse(request):
     if request.method == "GET":
         return render(request, "gestion/acceuil_vend.html")
 
-
+@login_required(login_url='login')
 def commande(request):
     user = request.user
     if(request.method == "GET"):
         commandes = Commandes.objects.all()
         context = {'commandes': commandes}
         return render (request, 'gestion/commandes.html', context=context)
+@login_required(login_url='login')
+def commande_liv(request):
+    user = request.user
+    if(request.method == "GET"):
+        commandes = Commandes.objects.all()
+        context = {'commandes': commandes}
+        return render (request, 'gestion/commandes_liv.html', context=context)
 
-
+@login_required(login_url='login')
 def create_commande(request):
     if request.method == "GET":
         produits = Produit.objects.all()
@@ -184,12 +188,14 @@ def create_commande(request):
 
     return redirect('/commandes')
 
+
+@login_required(login_url='login')
 def insuf(request):
     user = request.user
     if(request.method=="GET"):
         return render(request, "gestion/insuf.html")
 
-
+@login_required(login_url='login')
 def mod_com(request, commande_id):
     if(request.method=="GET"):
         commande = Commandes.objects.get(pk=commande_id)
@@ -263,23 +269,12 @@ def mod_com(request, commande_id):
 
 
 
-
+@login_required(login_url='login')
 def facture(request):
     if(request.method == "GET"):
         factures = Facture.objects.all()
         context = {"factures": factures}
         return render (request, 'gestion/factures.html', context=context)
-
-
-def create_facture(request):
-    user = request.user
-
-    if request.method == "GET":
-        produits = Produit.objects.all()
-        clients = Client.objects.all()
-        users = User.objects.all()
-        context = {"produits": produits, "clients": clients, "users": users}
-        return render(request, "gestion/create_facture.html", context=context)
 
 def profil_facture(request, facture_id):
     facture = Facture.objects.get(pk=facture_id)
@@ -290,6 +285,16 @@ def profil_facture(request, facture_id):
 
     return render(request, 'gestion/profil_facture.html', context=context)
 
+@login_required(login_url='login')
+def create_facture(request):
+    user = request.user
+
+    if request.method == "GET":
+        produits = Produit.objects.all()
+        clients = Client.objects.all()
+        users = User.objects.all()
+        context = {"produits": produits, "clients": clients, "users": users}
+        return render(request, "gestion/create_facture.html", context=context)
 """
     if request.method == 'POST':
         # Récupérer les données du formulaire
@@ -332,7 +337,7 @@ def profil_facture(request, facture_id):
 """
 
 
-
+@login_required(login_url='login')
 def produit(request):
     user = request.user
 
@@ -340,7 +345,8 @@ def produit(request):
         produits = Produit.objects.all()
         context= {"produits": produits}
         return render (request, "gestion/produit.html", context=context)
-        
+
+@login_required(login_url='login')        
 def create_produit(request):
     user = request.user
 
@@ -367,7 +373,7 @@ def create_produit(request):
         context={"produits":produit}
         return render(request, "gestion/profil_produit", context=context)
 """
-
+@login_required(login_url='login')
 def profil_produit(request, produit_id):
     if (request.method=="GET"):
         produit = get_object_or_404(Produit, Id=produit_id)
@@ -376,7 +382,7 @@ def profil_produit(request, produit_id):
 
 
 
-
+@login_required(login_url='login')
 def clients(request):
     user = request.user
     if(request.method =="GET"):
@@ -385,6 +391,7 @@ def clients(request):
         return render(request, "gestion/clients.html", context=context)
 
 
+@login_required(login_url='login')
 def create_client(request):
     user = request.user
 
@@ -404,7 +411,7 @@ def create_client(request):
 
 
 
-
+@login_required(login_url='login')
 def depense(request):
     user = request.user
 
@@ -413,7 +420,7 @@ def depense(request):
         context = {"depenses": depenses}
         return render(request, "gestion/depenses.html", context=context)
 
-
+@login_required(login_url='login')
 def create_depense(request):
     user = request.user
     
@@ -429,7 +436,7 @@ def create_depense(request):
 
 
 
-
+@login_required(login_url='login')
 def approvision(request):
     user = request.user
 
@@ -438,7 +445,7 @@ def approvision(request):
         context = {"approvisions": approvisions}
         return render(request, "gestion/approvisions.html", context=context)
 
-
+@login_required(login_url='login')
 def create_approvision(request):
     user = request.user
     if request.method == "GET":
@@ -464,7 +471,7 @@ def create_approvision(request):
 
 
 
-
+@login_required(login_url='login')
 def depensesprivees(request):
     user = request.user
     if (request.method == "GET"):
@@ -472,7 +479,7 @@ def depensesprivees(request):
         context={"depensesprivees": depensesprivees}
         return render (request, 'gestion/depensesprivees.html', context=context)
 
-
+@login_required(login_url='login')
 def create_depenseprivee(request):
     user = request.user
     
@@ -488,7 +495,7 @@ def create_depenseprivee(request):
 
 
 
-
+@login_required(login_url='login')
 def statistique(request):
     if (request.method == "GET"):
         produits=Produit.objects.all()
@@ -500,7 +507,7 @@ def statistique(request):
 
     return render(request, 'gestion/products_sold.html', {'products': products, "produits":produit})
 
-
+@login_required(login_url='login')
 def users(request):
     user = request.user
     if (request.method =="GET"):
@@ -509,13 +516,8 @@ def users(request):
         return render(request, "gestion/users.html", context=context)
     
 from django.contrib.auth.models import Group
-
+@login_required(login_url='login')
 def create_user(request):
-    if request.method == "GET":
-        users = User.objects.all()
-        context = {"users": users}
-        return render(request, "gestion/create_user.html", context=context)
-
     if request.method == "POST":
         # Récupérer les données du formulaire
         nom = request.POST.get('nom')
@@ -531,21 +533,22 @@ def create_user(request):
             existing_user = User.objects.get(username=username)
             return render(request, 'create_user.html', {'error': 'Nom d\'utilisateur déjà utilisé'})
         except User.DoesNotExist:
-            if statut == 'admin':
-                user = User.objects.create_superuser(username=username, password=password, email=email, first_name=prenom, last_name=nom)
-            else:
-                user = User.objects.create_user(username=username, password=password, email=email, first_name=prenom, last_name=nom)
+            user = User.objects.create_user(username=username, password=password, email=email, first_name=prenom, last_name=nom)
 
             profile = Profile.objects.create(user=user, telephone1=telephone1, telephone2=telephone2, statut=statut)
 
             # Assigner l'utilisateur au groupe correspondant
             if statut == 'livreur':
                 group = Group.objects.get(name='livreur')
+                user.groups.add(group)
             elif statut == 'gerant':
                 group = Group.objects.get(name='gerant')
-            else:
-                group = None
+                user.groups.add(group)
+            elif statut == 'superadmin':
+                user.is_superuser = True
+                user.is_staff = True  # Permet d'accéder à l'administration
+                user.save()
 
-        return redirect('/')
+            return redirect('/')  # Rediriger vers la page d'accueil
 
-    return render(request, 'insuffisant.html')
+    return render(request, 'gestion/create_user.html')  # Afficher le formulaire de création d'utilisateur

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import login, acceuil, acceuil_livreur, acceuil_vendeuse, create_commande, create_facture, create_produit, create_depense, create_client, create_approvision, clients, depense, produit, approvision, commande, facture, mod_com, depensesprivees, create_depenseprivee, profil_produit, statistique, users, create_user, insuf, profil_facture
+from .views import login, acceuil, acceuil_livreur, acceuil_vendeuse, create_commande, create_facture, create_produit, create_depense, create_client, create_approvision, clients, depense, produit, approvision, commande, commande_liv, facture, mod_com, depensesprivees, create_depenseprivee, profil_produit, statistique, users, create_user, insuf, profil_facture
 urlpatterns = [
     path('', login, name='login'),
     #path('login', login),
@@ -18,6 +18,7 @@ urlpatterns = [
     path('produits', produit, name='page_produits'),
     path('approvisions', approvision, name='page_approvisions'),
     path('commandes', commande, name='page_commandes'),
+    path('commandes_liv', commande_liv, name='page_commandes_liv'),
     path('factures', facture, name='page_factures'),
     path('create_fact', create_facture, name='creer_facture'),
     #path('statistiques', stat_ventes, name='statistique'),
