@@ -211,14 +211,13 @@ def mod_com(request, commande_id):
         payer = request.POST.get('payer')
         livreur = request.POST.get('livreur')
 
-        if statut == 'non livre':
-            commande.Statut = statut
-            commande.Telephone = telephone
-            commande.Payer = payer
-            commande.Livreur = livreur
-            commande.save()
+        commande.Statut = statut
+        commande.Telephone = telephone
+        commande.Payer = payer
+        commande.Livreur = livreur
+        commande.save()
 
-        elif statut == 'livre':
+        if statut == 'livre':
             # Vérifier si le client existe
             try:
                 client = Client.objects.get(Telephone=telephone)

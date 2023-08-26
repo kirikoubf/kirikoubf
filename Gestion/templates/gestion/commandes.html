@@ -96,6 +96,7 @@
             <th>Total</th>
             <th>Lieu</th>
             <th>Payer?</th>
+            <th>livreur</th>
             <th>Date et heure</th>
             <th>Actions</th>
         </tr>
@@ -111,6 +112,7 @@
                 <td>{{commande.Total}}</td>
                 <td>{{commande.Lieu}}</td>
                 <td>{{commande.Payer}}</td>
+                <td>{{commande.Livreur}}</td>
                 <td>{{commande.date_et_heure}}</td>
                 <td>
                     <a href="{% url 'modifier_commande' commande.No %}" class="modify-link">Modifier</a>
