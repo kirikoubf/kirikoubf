@@ -565,17 +565,16 @@ def create_user(request):
 
 
 
-
 def date(request):
     if request.method == "GET":
         return render(request, "gestion/form_somme.html")
-"""
+
     if request.method == "POST":
         jour = request.POST.get('jour')
         mois = request.POST.get('mois')
         annee = request.POST.get('annee')
         return redirect("sommes/", jour=jour, mois=mois, annee=annee)
-"""
+
 def somme_factures(request):
     if request.method == "GET":
         jour_etudie = 28
@@ -605,3 +604,50 @@ def somme_factures(request):
             'mois_etudie': mois_etudie,
             'annee_etudie': annee_etudie,
         })
+
+
+
+"""
+def date(request):
+    if request.method == "GET":
+        return render(request, "gestion/form_somme.html")
+
+    if request.method == "POST":
+        jour = request.POST.get('jour')
+        mois = request.POST.get('mois')
+        annee = request.POST.get('annee')
+        return redirect("sommes/", jour=jour, mois=mois, annee=annee)
+
+
+def somme_factures(request, jour_etudie, mois_etudie, annee_etudie):
+    jour_etudie = int(jour_etudie)
+    mois_etudie = int(mois_etudie)
+    annee_etudie = int(annee_etudie)
+
+    time_ranges = [
+        (time(8), time(18), 'sum_8_18'),
+        (time(18), time(23), 'sum_18_23')
+    ]
+
+    sums = {}
+
+    for start_time, end_time, sum_name in time_ranges:
+        filtered_factures = Facture.objects.filter(
+            date_et_heure__time__gte=start_time,
+            date_et_heure__time__lt=end_time,
+            date_et_heure__day=jour_etudie,
+            date_et_heure__month=mois_etudie,
+            date_et_heure__year=annee_etudie
+        )
+        total_amount = filtered_factures.aggregate(Sum('Montant'))
+        sums[sum_name] = total_amount['Montant__sum']
+
+    context = {
+        'sums': sums,
+        'jour_etudie': jour_etudie,
+        'mois_etudie': mois_etudie,
+        'annee_etudie': annee_etudie,
+    }
+
+    return render(request, 'gestion/sommes.html', context)
+    """

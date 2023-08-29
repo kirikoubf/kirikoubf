@@ -34,7 +34,7 @@ urlpatterns = [
     path('create_user', create_user, name='create_user'),
     path('insuf', insuf, name='insuffissance'),
     path('facture/<int:facture_id>/', profil_facture, name='profil_facture'),
-    path('sommes/date/', views.date, name='date'),
+    path('date/', views.date, name='date'),
     path('sommes/', views.somme_factures, name='sommes'),
 ]
 
