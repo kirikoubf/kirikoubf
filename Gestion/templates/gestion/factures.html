@@ -142,19 +142,29 @@
         <tr>
             <th>Nom</th>
             <th>Prénom</th>
+            <th>Téléphone</th>
             <th>Produit</th>
             <th>Quantité</th>
+            <th>Montant</th>
+            <th>Rabais</th>
             <th>Total</th>
             <th>Lieu</th>
+            <th>livreur</th>
+            <th>Date et heure</th>
         </tr>
         {% for facture in factures %}
         <tr onclick="window.location='{% url 'profil_facture' facture_id=facture.No %}';" style="cursor: pointer;">
             <td>{{ facture.Nom }}</td>
             <td>{{ facture.Prenom }}</td>
+            <td>{{ facture.Telephone }}</td>
             <td>{{ facture.Produit }}</td>
             <td>{{ facture.Quantite }}</td>
+            <td>{{ facture.Montant }}</td>
+            <td>{{ facture.Rabais }}</td>
             <td>{{ facture.Total }}</td>
             <td>{{ facture.Lieu }}</td>
+            <td>{{ facture.Livreur }}</td>
+            <td>{{ facture.date_et_heure }}</td>
         </tr>
         {% endfor %}
     </table>

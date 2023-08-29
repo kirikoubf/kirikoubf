@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import login, acceuil, acceuil_livreur, acceuil_vendeuse, create_commande, create_facture, create_produit, create_depense, create_client, create_approvision, clients, depense, produit, approvision, commande, commande_liv, facture, mod_com, depensesprivees, create_depenseprivee, profil_produit, statistique, users, create_user, insuf, profil_facture
+from .views import login, acceuil, acceuil_livreur, acceuil_vendeuse, create_commande, create_facture, create_produit, create_depense, create_client, create_approvision, clients, profil_client, depense, produit, approvision, commande, commande_liv, facture, mod_com, depensesprivees, create_depenseprivee, profil_produit, statistique, users, create_user, insuf, profil_facture
 urlpatterns = [
     path('', login, name='login'),
     #path('login', login),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('create_cli', create_client, name='creer_client'),
     path('create_app', create_approvision, name='creer_approvision'),
     path('clients', clients, name='page_clients'),
+    path('client/<int:client_id>/',profil_client, name='profil_client'),
     path('depenses', depense, name='page_depenses'),
     path('produits', produit, name='page_produits'),
     path('approvisions', approvision, name='page_approvisions'),
@@ -32,6 +33,8 @@ urlpatterns = [
     path('users', users, name="users"),
     path('create_user', create_user, name='create_user'),
     path('insuf', insuf, name='insuffissance'),
-    path('facture/<int:facture_id>/', profil_facture, name='profil_facture')
+    path('facture/<int:facture_id>/', profil_facture, name='profil_facture'),
+    path('sommes/date/', views.date, name='date'),
+    path('sommes/', views.somme_factures, name='sommes'),
 ]
 

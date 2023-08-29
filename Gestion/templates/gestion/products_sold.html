@@ -66,6 +66,7 @@
             <th>Mois</th>
             <th>Quantité totale</th>
             <th>Montant total</th>
+            <th>Encaisse</th>
         </tr>
         {% for product in products %}
         <tr>
@@ -74,6 +75,7 @@
             <td>{{ product.month }}</td>
             <td>{{ product.total_quantity }}</td>
             <td>{{ product.total_amount }}</td>
+            <td>{{ product.total_total }}</td>
         </tr>
         {% endfor %}
     </table>

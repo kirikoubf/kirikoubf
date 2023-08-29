@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Date</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajouter commande</title>
   <style>
     /* Styles pour le formulaire */
     body {
@@ -11,7 +11,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 130vh; /* Hauteur de l'écran */
+      height: 100vh; /* Hauteur de l'écran */
       margin: 0; /* Supprimer la marge par défaut du corps */
       font-family: Arial, sans-serif; /* Police de caractères */
     }
@@ -39,7 +39,7 @@
 
     .container input,
     .container select,
-    .container textarea {
+    .container textarea { /* Ajout du style pour textarea */
       display: block;
       margin-bottom: 10px;
       width: 95%; /* Largeur du champ */
@@ -67,63 +67,22 @@
 </head>
 <body>
   <div class="container">
-    <h2>Creer une Commande</h2>
-    <form method="POST">
+    <h2>Faire des comptes</h2>
+    <form method="POST" action="{% url 'date' %}/">
       {% csrf_token %} <!-- Jeton CSRF pour sécurité -->
       <div>
-        <label for="nom">Nom :</label>
-        <input type="text" name="nom" maxlength="15" required>
+        <label for="nom">jour :</label>
+        <input type="number" id="jour" name="jour" maxlength="2" required>
       </div>
       <div>
-        <label for="prenom">Prenom :</label>
-        <input type="text" name="prenom" maxlength="20" required>
+        <label for="prenom">mois :</label>
+        <input type="number" id="mois" name="mois" maxlength="2" required></input>
       </div>
       <div>
-        <label for="telephone">Telephone :</label>
-        <input type="text" name="telephone" maxlength="15" required>
+        <label for="telephone">annee :</label>
+        <input type="number" id="annee" name="annee" maxlength="4" required>
       </div>
-      <div>
-        <label for="lieu">Lieu :</label>
-        <input type="text" name="lieu" maxlength="15" required>
-      </div>
-      <div>
-        <label for="produit">Produit :</label>
-        <select name="produit">
-          {% for produit in produits %}
-            <option value="{{ produit.Id }}">{{ produit.Id }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div>
-        <label for="quantite">Quantite :</label>
-        <input type="number" name="quantite" value=1 required>
-      </div>
-      <div>
-        <label for="rabais">Rabais :</label>
-        <input type="number" name="rabais" value=0 required>
-      </div>
-      <div>
-        <label for="statut">Statut :</label>
-        <select name="statut" required>
-          <option value="non livre">Non livré</option>
-          <option value="livre">Livre</option>
-        </select>
-      </div>
-      <div>
-        <label for="payer">Payer ? :</label>
-        <select name="payer" required>
-          <option value="NON">NON</option>
-          <option value="OUI">OUI</option>
-        </select>
-      </div>
-      <div>
-        <label for="livreur">Livreur :</label>
-        <select name="livreur" required>
-          {% for user in users %}
-            <option value="{{ user.get_full_name }}">{{ user.get_full_name }}</option>
-          {% endfor %}
-        </select>
-      </div>
+
       <div>
         <button type="submit">Enregistrer</button>
       </div>

@@ -73,7 +73,7 @@
             <th>Dernier Passage</th>
         </tr>
         {% for client in clients %}
-            <tr>
+            <tr onclick="window.location='{% url 'profil_client' client.id %}';" style="cursor: pointer;">
                 <td><span>{{ client.Nom }}</span></td>
                 <td><span>{{ client.Prenom }}</span></td>
                 <td>{{ client.Telephone }}</td>

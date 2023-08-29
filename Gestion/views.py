@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Profile
 from datetime import datetime
+from datetime import datetime, time
 from django.db.models import Count
 from django.contrib.auth import authenticate as login_user
 from django.contrib.auth import get_user_model
@@ -408,6 +409,12 @@ def create_client(request):
 
     return redirect("/clients")
 
+def profil_client(request, client_id):
+    if request.method =="GET":
+        client = Client.objects.get(pk=client_id)
+        factures = Facture.objects.filter(Telephone=client.Telephone)
+        context = {'client': client, 'factures': factures}
+        return render(request, 'gestion/profil_client.html', context=context)
 
 
 @login_required(login_url='login')
@@ -501,8 +508,9 @@ def statistique(request):
         products = Produit.objects.annotate(
         total_quantity=Sum('factures__Quantite'),
         total_amount=Sum(F('factures__Quantite') * F('factures__Produit__Prix')),
+        total_total=Sum(F('factures__Total')),
         month=TruncMonth('factures__date_et_heure')
-    ).values('Id','Name', 'month', 'total_quantity', 'total_amount').order_by('month')
+    ).values('Id','Name', 'month', 'total_quantity', 'total_amount', 'total_total').order_by('month')
 
     return render(request, 'gestion/products_sold.html', {'products': products, "produits":produit})
 
@@ -551,3 +559,49 @@ def create_user(request):
             return redirect('/')  # Rediriger vers la page d'accueil
 
     return render(request, 'gestion/create_user.html')  # Afficher le formulaire de création d'utilisateur
+
+
+
+
+
+
+
+def date(request):
+    if request.method == "GET":
+        return render(request, "gestion/form_somme.html")
+"""
+    if request.method == "POST":
+        jour = request.POST.get('jour')
+        mois = request.POST.get('mois')
+        annee = request.POST.get('annee')
+        return redirect("sommes/", jour=jour, mois=mois, annee=annee)
+"""
+def somme_factures(request):
+    if request.method == "GET":
+        jour_etudie = 28
+        mois_etudie = 8
+        annee_etudie = 2023
+
+        sum_8_18 = Facture.objects.filter(
+            date_et_heure__time__gte=time(8),
+            date_et_heure__time__lt=time(18),
+            date_et_heure__day=jour_etudie,
+            date_et_heure__month=mois_etudie,
+            date_et_heure__year=annee_etudie
+        ).aggregate(Sum('Montant'))
+
+        sum_18_23 = Facture.objects.filter(
+            date_et_heure__time__gte=time(18),
+            date_et_heure__time__lt=time(23),
+            date_et_heure__day=jour_etudie,
+            date_et_heure__month=mois_etudie,
+            date_et_heure__year=annee_etudie
+        ).aggregate(Sum('Montant'))
+
+        return render(request, 'gestion/sommes.html', {
+            'sum_8_18': sum_8_18['Montant__sum'],
+            'sum_18_23': sum_18_23['Montant__sum'],
+            'jour_etudie': jour_etudie,
+            'mois_etudie': mois_etudie,
+            'annee_etudie': annee_etudie,
+        })

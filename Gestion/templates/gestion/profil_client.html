@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profil du Client</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        th {
+            background-color: #00bfff;
+            color: white;
+            text-align: center;
+        }
+
+        .status-non-livre {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-livre {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-annule {
+            color: gray;
+            font-weight: bold;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .create-button {
+            background-color: #00bfff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .create-button:hover {
+            background-color: #0084ff;
+        }
+
+        tr {
+            height: 50px; /* Vous pouvez ajuster la hauteur comme vous le souhaitez */
+        }
+    </style>
+</head>
+<body>
+    <h2>Profil du Client <span style="color:#0084ff; font-weight: bold;">{{ client.Nom }} {{ client.Prenom }}</span></h2>
+    <div style="display: flex; justify-content: space-around;">
+        <p>Téléphone : {{ client.Telephone }}</p>
+        <p>Achats : {{ client.Achats }}</p>
+        <p>Interventions : {{ client.Interventions }}</p>
+    </div>
+
+    <h2>Factures du Client</h2>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Total</th>
+            <th>Lieu</th>
+        </tr>
+        {% for facture in factures %}
+        <tr onclick="window.location='{% url 'profil_facture' facture_id=facture.No %}';" style="cursor: pointer;">
+                <td>{{ facture.Nom }}</td>
+                <td>{{ facture.Prenom }}</td>
+                <td>{{ facture.Produit }}</td>
+                <td>{{ facture.Quantite }}</td>
+                <td>{{ facture.Total }}</td>
+                <td>{{ facture.Lieu }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
