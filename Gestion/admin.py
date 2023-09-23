@@ -7,10 +7,10 @@ class ProduitAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Description', 'Prix', 'Quantite', 'Id', 'Image', 'date_added')
 
 class CommandesAdmin(admin.ModelAdmin):
-    list_display = ('No', 'Nom', 'Prenom', 'Telephone', 'Produit', 'Quantite', 'Montant', 'Rabais', 'Total', 'Lieu', 'Statut', 'Payer', 'date_et_heure')
+    list_display = ('No', 'Nom', 'Prenom', 'Telephone', 'Produit', 'Quantite', 'Montant', 'Rabais', 'Total', 'Equipe', 'Lieu', 'Statut', 'Payer', 'date_et_heure')
 
 class FactureAdmin(admin.ModelAdmin):
-    list_display = ('No', 'Nom', 'Prenom', 'Telephone', 'Produit', 'Quantite', 'Montant', 'Rabais', 'Total', 'Lieu','Livreur', 'date_et_heure')
+    list_display = ('No', 'Nom', 'Prenom', 'Telephone', 'Produit', 'Quantite', 'Montant', 'Rabais', 'Total', 'Equipe', 'Lieu','Livreur', 'date_et_heure')
 
 class ApprovisionAdmin(admin.ModelAdmin):
     list_display = ('Fournisseur', 'Telephone', 'Produit','Quantite', 'date_added')

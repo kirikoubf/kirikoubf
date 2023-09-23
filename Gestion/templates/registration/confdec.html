@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirme Deconnexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00bfff; /* Couleur bleu ciel pour le logo */
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: red; /* Couleur bleu ciel pour le titre */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+
+        button {
+            width: 120px;
+            height: 45px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #00bfff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0084ff; /* Couleur bleu ciel au survol du bouton */
+        }
+        a{
+            text-decoration:none;
+        }
+        .chx{
+            margin-left:40%;
+            margin-top:5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo"><h2>Kirikoubf</h2></div>
+    </div>
+    <div class="container">
+        <h1>Deconnexion</h1>
+        <p>Voulez-Vous vraiment vous deconnecter ?</p>
+        <div class="chx">
+            <a href="{% url 'logout' %}" style="color:red">OUI</a>
+            <a href="{% url 'acceuil' %}" style="margin-left:20%; color:#00bfff;">NON</a>
+        </div>
+    </div>
+</body>
+</html>

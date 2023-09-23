@@ -1,8 +1,10 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.contrib.auth import get_user_model
+from django.contrib.auth import logout
 
 User = get_user_model()
 
@@ -58,6 +60,12 @@ class Commandes(models.Model):
     Livreur = models.CharField(max_length=10, default="En cours")
     date_et_heure = models.DateTimeField(auto_now=True)
 
+    EQUIPE_CHOICES = [
+        ("equipe01", "equipe01"),
+        ("equipe 02", "equipe 02"),
+    ]
+    Equipe = models.CharField(max_length=10, choices=EQUIPE_CHOICES, default="equipe01")
+
     def __str__(self) -> str:
         return f"{self.Nom}"
 
@@ -81,7 +89,12 @@ class Facture(models.Model):
     Lieu = models.TextField(default="Boutique")
 
     Livreur = models.CharField(max_length=10, default="Boutique")
-    date_et_heure = models.DateTimeField(auto_now=True)
+    date_et_heure = models.DateTimeField(default=timezone.now)
+    EQUIPE_CHOICES = [
+        ("equipe01", "equipe01"),
+        ("equipe 02", "equipe 02"),
+    ]
+    Equipe = models.CharField(max_length=10, choices=EQUIPE_CHOICES, default="equipe01")
 
     def __str__(self) -> str:
         return f"{self.Nom}"

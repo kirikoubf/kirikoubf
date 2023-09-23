@@ -17,6 +17,12 @@ from django.db.models import F, ExpressionWrapper, DecimalField
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from weasyprint import HTML
+from io import BytesIO
+
+from django.core.mail import send_mail
+from django.conf import settings
 
 User = get_user_model()
 
@@ -114,6 +120,7 @@ def create_commande(request):
         lieu = request.POST.get('lieu')
         payer = request.POST.get('payer')
         statut = request.POST.get('statut')
+        equipe = request.POST.get('equipe')
         livreur = request.POST.get('livreur')
         
         # Vérifier si le produit existe
@@ -143,6 +150,7 @@ def create_commande(request):
                     Lieu=lieu,
                     Statut=statut,
                     Payer=payer,
+                    Equipe=equipe,
                     Livreur=livreur
                 )
                 commande.save()
@@ -181,6 +189,7 @@ def create_commande(request):
                     Rabais = rabais,
                     Total = total,
                     Lieu=lieu,
+                    Equipe=equipe,
                     Livreur=livreur
                 )
                 facture.save()
@@ -210,11 +219,13 @@ def mod_com(request, commande_id):
         telephone = request.POST.get('telephone')
         statut = request.POST.get('statut')
         payer = request.POST.get('payer')
+        equipe = request.POST.get('equipe')
         livreur = request.POST.get('livreur')
 
         commande.Statut = statut
         commande.Telephone = telephone
         commande.Payer = payer
+        commande.Equipe = equipe
         commande.Livreur = livreur
         commande.save()
 
@@ -248,6 +259,7 @@ def mod_com(request, commande_id):
                 Rabais=commande.Rabais,
                 Total=commande.Total,
                 Lieu=commande.Lieu,
+                Equipe=equipe,
                 Livreur=commande.Livreur
             )
             facture.save()
@@ -272,7 +284,7 @@ def mod_com(request, commande_id):
 @login_required(login_url='login')
 def facture(request):
     if(request.method == "GET"):
-        factures = Facture.objects.all()
+        factures = reversed(Facture.objects.all())
         context = {"factures": factures}
         return render (request, 'gestion/factures.html', context=context)
 
@@ -282,6 +294,9 @@ def profil_facture(request, facture_id):
     context = {
         'facture': facture,
     }
+
+    return render(request, 'gestion/profil_facture.html', context=context)
+
 
     return render(request, 'gestion/profil_facture.html', context=context)
 
@@ -343,7 +358,8 @@ def produit(request):
 
     if(request.method == "GET"):
         produits = Produit.objects.all()
-        context= {"produits": produits}
+        produits_tries = sorted(produits, key=lambda produit: produit.Quantite, reverse=True)        
+        context= {"produits": produits_tries}
         return render (request, "gestion/produit.html", context=context)
 
 @login_required(login_url='login')        
@@ -387,7 +403,8 @@ def clients(request):
     user = request.user
     if(request.method =="GET"):
         clients = Client.objects.all()
-        context = {"clients": clients}
+        clients_tries = sorted(clients, key=lambda client: client.Achats, reverse=True)
+        context = {"clients": clients_tries}
         return render(request, "gestion/clients.html", context=context)
 
 
@@ -651,3 +668,219 @@ def somme_factures(request, jour_etudie, mois_etudie, annee_etudie):
 
     return render(request, 'gestion/sommes.html', context)
     """
+"""
+def generate_pdf(request, facture_id):
+    # Récupérez les données de la facture depuis la base de données (Facture.objects.get...)
+    facture = Facture.objects.get(pk=facture_id)
+
+    # Récupérez le contenu HTML de la page de facture
+    template = 'profil_facture.html'
+    context = {'facture': facture}
+    html_string = render(request, template, context).content.decode('utf-8')
+
+    # Créez un objet WeasyPrint HTML à partir de la chaîne HTML
+    html = HTML(string=html_string)
+
+    # Créez un fichier temporaire pour le PDF
+    pdf_file = BytesIO()
+
+    # Générez le PDF et écrivez-le dans le fichier temporaire
+    html.write_pdf(target=pdf_file)
+
+    # Configurez la réponse HTTP pour le fichier PDF généré
+    response = HttpResponse(pdf_file.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="facture_{facture_id}.pdf"'
+
+    return response
+"""
+
+
+
+from django.http import HttpResponse
+from weasyprint import HTML
+from io import BytesIO
+from django.template.loader import render_to_string  # Ajoutez cette ligne
+
+def pdf(request, facture_id):
+    facture = Facture.objects.get(pk=facture_id)
+
+    context = {
+        'facture': facture,
+    }
+
+    # Générer le PDF à partir du modèle HTML
+    html_string = render_to_string('gestion/pdf.html', context)
+    pdf_file = BytesIO()
+    HTML(string=html_string).write_pdf(pdf_file)
+
+    # Préparer la réponse HTTP pour le fichier PDF généré
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename=facture_{facture_id}.pdf'
+    response.write(pdf_file.getvalue())
+
+    return response
+"""
+def compter(request):
+    if request.method =="GET":
+        factures = Facture.objects.all()
+        context = {"factures": factures}
+        return render (request, "gestion/compter.html", context=context)
+"""
+
+from django.shortcuts import render
+from .models import Facture
+from datetime import datetime, time
+
+def compter(request):
+    if request.method == "GET":
+        # Récupérez la date à partir de la requête GET
+        date_string = request.GET.get('date')
+        
+        if date_string is not None:
+            try:
+                # Convertissez la chaîne de date en objet datetime
+                date = datetime.strptime(date_string, '%Y-%m-%d')
+        
+                # Obtenez la liste des équipes disponibles dans votre modèle Facture
+                equipes = Facture.objects.values_list('Equipe', flat=True).distinct()
+        
+                # Créez des dictionnaires pour stocker les factures par équipe
+                factures_par_equipe = {}
+                
+                # Créez des variables pour stocker les montants totaux par équipe
+                montant_total_equipe01 = 0
+                montant_total_equipe02 = 0
+        
+                # Pour chaque équipe, filtrez les factures par équipe et calculez le montant total
+                for equipe in equipes:
+                    factures_equipe = Facture.objects.filter(Equipe=equipe, date_et_heure__date=date)
+                    montant_total_equipe = factures_equipe.aggregate(Sum('Total'))['Total__sum'] or 0
+                    
+                    # Stockez les factures dans le dictionnaire correspondant à l'équipe
+                    factures_par_equipe[equipe] = factures_equipe
+                    
+                    # Stockez les montants totaux dans les variables appropriées
+                    if equipe == 'equipe01':
+                        montant_total_equipe01 = montant_total_equipe
+                    elif equipe == 'equipe02':
+                        montant_total_equipe02 = montant_total_equipe
+        
+                # Retournez les factures par équipe et les montants totaux dans un modèle HTML
+                return render(request, 'gestion/compter.html', {
+                    'date': date,
+                    'factures_par_equipe': factures_par_equipe,
+                    'montant_total_equipe01': montant_total_equipe01,
+                    'montant_total_equipe02': montant_total_equipe02,
+                })
+            except ValueError:
+                # La date saisie n'est pas au bon format
+                return render(request, 'gestion/compter.html', {'erreur': 'Format de date incorrect'})
+        else:
+            # Aucune date saisie dans le formulaire
+            return render(request, 'gestion/compter.html', {'erreur': 'Veuillez saisir une date'})
+
+    return render(request, 'gestion/compter.html', {})
+
+
+
+# views.py
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+import random
+import string
+
+def reset_password(request):
+    if request.method == "POST":
+        # Récupérez l'adresse e-mail soumise dans le formulaire
+        email = request.POST.get('email')
+
+        try:
+            # Vérifiez si un utilisateur avec cette adresse e-mail existe
+            user = User.objects.get(email=email)
+
+            # Générez un nouveau mot de passe temporaire
+            temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+            # Réinitialisez le mot de passe de l'utilisateur
+            user.set_password(temp_password)
+            user.save()
+
+            # Envoyez un e-mail avec le nouveau mot de passe
+            subject = 'Réinitialisation de votre mot de passe'
+            message = f"Cher(e) {user.username},\n\nNous avons reçu une demande de réinitialisation de mot de passe pour votre compte.\n\nVotre nouveau mot de passe est : {temp_password} \n\nNous vous remercions de votre confiance en notre service.\nCordialement,\nL'équipe de support de Kirikoubf"
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+
+            send_mail(subject, message, from_email, recipient_list)
+
+            # Affichez un message de succès
+            messages.success(request, 'Un e-mail contenant le nouveau mot de passe a été envoyé à votre adresse.')
+
+            # Redirigez l'utilisateur vers la page de connexion ou une autre page appropriée
+            return redirect('confmail')  # Assurez-vous d'avoir une URL nommée 'login' dans vos URL
+
+        except User.DoesNotExist:
+            # Si l'utilisateur n'existe pas, affichez un message d'erreur
+            messages.error(request, 'Aucun utilisateur avec cette adresse e-mail n\'a été trouvé.')
+
+    return render(request, 'registration/password.html')
+
+from django.contrib.auth import authenticate
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def change_password(request):
+    if request.method == 'GET':
+        return render(request, 'registration/chpassword.html')
+
+    if request.method == 'POST':
+        old_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+
+        # Vérifiez si l'ancien mot de passe correspond
+        user = authenticate(username=request.user.username, password=old_password)
+
+        if user is not None:
+            # Changez le mot de passe et sauvegardez l'utilisateur
+            user.set_password(new_password)
+            user.save()
+
+            messages.success(request, 'Votre mot de passe a été modifié avec succès.')
+            return redirect('confpass')  # Redirigez l'utilisateur vers la page d'accueil ou une autre page de votre choix
+        else:
+            messages.error(request, 'Mot de passe incorrect.')
+
+    return render(request, 'registration/chpassword.html')
+
+def confmail(request):
+    if request.method == "GET":
+        return render(request, 'registration/confmail.html')
+
+def confpass(request):
+    if request.method == "GET":
+        return render(request, 'registration/confpass.html')
+@login_required
+def confcon(request):
+    if request.method == "GET":
+        return render(request, 'registration/confcon.html')
+@login_required
+def confdec(request):
+    if request.method == "GET":
+        return render(request, 'registration/confdec.html')
+
+def error(request):
+    if request.method == "GET":
+        return render(request, 'registration/error.html')
+
+
+@login_required
+def redirection_accueil(request):
+    if request.user.groups.filter(name='gerant').exists():
+        return redirect('acceuil_vend')
+    elif request.user.groups.filter(name='livreur').exists():
+        return redirect('acceuil_liv')
+    else:
+        return redirect('acceuil')

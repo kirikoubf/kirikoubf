@@ -3,108 +3,35 @@
 <head>
     <title>Factures</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        th {
-            background-color: #00bfff;
-            color: white;
-            text-align: center;
-        }
-
-        .status-non-livre {
-            color: red;
-            font-weight: bold;
-        }
-
-        .status-livre {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-annule {
-            color: gray;
-            font-weight: bold;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .create-button {
-            background-color: #00bfff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .create-button:hover{
-            background-color: #0084ff;
-        }
-        
-        /* Style pour prendre toute la largeur de l'écran */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
+            font-family: Arial, sans-serif;
         }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        table.common-style {
+            border-collapse: collapse;
+            width: 100%;
             text-align: center;
         }
 
-        tr:hover {
+        table.common-style th, table.common-style td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table.common-style th {
+            background-color: #00bfff;
+            color: white;
+        }
+
+        table.common-style tr:hover {
             background-color: #f5f5f5;
         }
 
-        th {
-            background-color: #00bfff;
-            color: white;
-            text-align: center;
-        }
+        /* Le reste de votre style pour cette page va ici */
 
-        .status-non-livre {
-            color: red;
-            font-weight: bold;
-        }
-
-        .status-livre {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-annule {
-            color: gray;
-            font-weight: bold;
-        }
         .header {
             display: flex;
             justify-content: space-between;
@@ -124,20 +51,21 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .create-button:hover{
+        
+        .create-button:hover {
             background-color: #0084ff;
         }
-        tr {
-            height: 50px; /* Vous pouvez ajuster la hauteur comme vous le souhaitez */
-        }
+        
+        /* Le reste de votre style pour cette page va ici */
     </style>
 </head>
 <body>
     <div class="header">
         <h1 style="margin-left: 5%;">Liste des Factures</h1>
+        <a href="{% url 'compter' %}" style="margin-right: 50px;" class="create-button">Comptes</a>
     </div>
     <!-- Afficher le numéro de facture en haut au centre de la page -->
-    <table>
+    <table class="common-style">
         <tr>
             <th>Nom</th>
             <th>Prénom</th>
@@ -149,6 +77,7 @@
             <th>Total</th>
             <th>Lieu</th>
             <th>livreur</th>
+            <th>Equipe</th>
             <th>Date et heure</th>
         </tr>
         {% for facture in factures %}
@@ -163,6 +92,7 @@
             <td>{{ facture.Total }}</td>
             <td>{{ facture.Lieu }}</td>
             <td>{{ facture.Livreur }}</td>
+            <td>{{ facture.Equipe }}</td>
             <td>{{ facture.date_et_heure }}</td>
         </tr>
         {% endfor %}

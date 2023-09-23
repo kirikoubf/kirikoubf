@@ -86,7 +86,13 @@
           <option value="OUI" {% if commande.Payer == "OUI" %}selected{% endif %}>OUI</option>
         </select>
       </div>
-
+      <div>
+        <label for="Payer">Equipe:</label>
+        <select name="equipe" required>
+          <option value="equipe01" {% if commande.Equipe == "equipe01" %}selected{% endif %}>equipe01</option>
+          <option value="equipe02" {% if commande.Equipe == "equipe02" %}selected{% endif %}>equipe02</option>
+        </select>
+      </div>
       <div>
         <label for="livreur">Livreur :</label>
         <select name="livreur" required>
