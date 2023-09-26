@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page d'accueil</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -135,6 +137,34 @@
         }
         .imgnom{
             margin-left:11%;
+        }
+        @media (max-width: 768px) {
+            .container a {
+                width: 95%; /* Largeur de 95% pour chaque case */
+                height: 270px;
+            }
+            .kirikou{
+                font-size: 50px;
+                margin:0px;
+            }
+            .buttons {
+                display: flex;
+                gap: 10px;
+                margin-left: 10%;
+                margin-left:15%;
+            }
+            .intro{
+                display: inline;
+                align-items: center;
+                margin-left:45%;
+            }
+            .h1{
+                align-items: center;
+            }
+            .imgnom{
+                align-items: center;
+                margin-left:15%;
+            }
         }
     </style>
 </head>

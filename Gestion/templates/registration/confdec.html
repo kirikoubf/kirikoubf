@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirme Deconnexion</title>
     <style>
         body {
@@ -85,7 +87,7 @@
         <p>Voulez-Vous vraiment vous deconnecter ?</p>
         <div class="chx">
             <a href="{% url 'logout' %}" style="color:red">OUI</a>
-            <a href="{% url 'acceuil' %}" style="margin-left:20%; color:#00bfff;">NON</a>
+            <a href="{% url 'redirection_acceuil' %}" style="margin-left:20%; color:#00bfff;">NON</a>
         </div>
     </div>
 </body>

@@ -69,9 +69,10 @@
 </head>
 <body>
     <div class="header">
-        <h1 style="margin-left:5%">Stock</h1>
-        <a href="{% url 'creer_produit' %}" style="margin-right: 50px;" class="create-button">Créer</a>
-    </div>
+        <h1 style="margin-left:5%; flex: 1;">Stock</h1>
+        <a href="{% url 'redirection_acceuil' %}" class="create-button">Accueil</a>|
+        <a href="{% url 'creer_produit' %}" class="create-button" style="margin-right: 50px;">Créer</a>
+    </div>    
     <div class="product-container">
         {% for produit in produits%}
             <a href="{% url 'profil_produit' produit.Id %}" style="text-decoration:none; color:black;" class="product"> <!-- Ajout du lien vers la page de profil du produit -->

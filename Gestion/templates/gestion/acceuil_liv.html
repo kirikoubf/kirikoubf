@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page d'accueil</title>
+    <title>Accueil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -90,25 +90,116 @@
         text-align: center;
         }
 
-    hr {
-        border: none;
-        height: 1px;
-        background-color: #ccc;
-        margin:0;
-        padding:0;
-        margin-top:1px
-    }
-
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #ccc;
+            margin:0;
+            padding:0;
+            margin-top:1px
+        }
+        .intro {
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+            position: relative; /* Ajoutez une position relative à l'introduction */
+            display:flex;
+        }
+    
+        .logout-container {
+            position: absolute;
+            top: 10px;
+            right: 20px; /* Espacement de 20px par rapport au bord droit */
+            display: flex;
+            align-items: center;
+        }
+    
+        .logout-button {
+            width: 90px;
+            height: 60px;
+            background-color: lightgray;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+            font-weight: bold;
+            font-size:15px;
+        }
+        button {
+            width: 120px;
+            height: 45px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #00bfff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        button:hover {
+            background-color: darkred;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: 44%;
+        }
+        .imgnom{
+            margin-left:11%;
+        }
+        h2 {
+            margin: 0;
+            padding: 0;
+            font-size: 30px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container a {
+                width: 95%; /* Largeur de 95% pour chaque case */
+                height: 270px;
+            }
+            .kirikou{
+                font-size: 50px;
+                margin:0px;
+            }
+            .buttons {
+                display: flex;
+                gap: 10px;
+                margin-left: 10%;
+                margin-left:15%;
+            }
+            .intro{
+                display: inline;
+                align-items: center;
+                margin-left:45%;
+            }
+            .h1{
+                align-items: center;
+            }
+            .imgnom{
+                align-items: center;
+                margin-left:15%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="intro">
         <div class="imgnom">
-            <img src="{%static 'logo.jpg' %}" class="logo" >
-            <h1  style="color: skyblue; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">Kirikoubf</h1>
-            <h2 style="font-size: 30px; font-family: 'Times New Roman', Times, serif;">Gestion</h2>
+            <h1 style="color: #00bfff; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; " class="kirikou">Kirikoubf</h1>
+        </div>
+        <div class="buttons">
+            <button onclick="window.location.href='change_password'"><i class="fas fa-key"></i></button>
+            <button onclick="window.location.href='confdec'"><i class="fas fa-sign-out-alt"></i></button>
         </div>
     </div>
+    <h2 style="font-size: 30px; font-family: 'Times New Roman', Times, serif;">Gestion</h2>
     <hr>
     <div class="container">
         <a href="{% url 'page_commandes_liv' %}" style="background-color: #19e4e4;">

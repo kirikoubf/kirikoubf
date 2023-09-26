@@ -1,1 +1,4 @@
 db.sqlite
+staticfiles/
+media/
+*/__pycache__/

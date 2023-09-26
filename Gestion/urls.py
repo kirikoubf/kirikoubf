@@ -54,6 +54,6 @@ urlpatterns = [
     path('confcon', views.confcon, name='confcon'),
     path('confdec', views.confdec, name='confdec'),
     path('ERROR', views.error, name='error'),
-    path('redirection/', views.redirection_accueil, name='redirection_accueil'),
+    path('redirection/', views.redirection_accueil, name='redirection_acceuil'),
     ]
 

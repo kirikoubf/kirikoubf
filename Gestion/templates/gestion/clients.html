@@ -68,11 +68,25 @@
         tr {
             cursor: pointer;
         }
+
+        .search-container {
+            margin-top: 10px;
+        }
+
+        #search-input {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Liste des clients</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Rechercher par nom ou prénom...">
+        </div><br>
         <a href="{% url 'creer_client' %}" style="margin-right: 50px;" class="create-button">Créer</a>
     </div>
     <table class="common-style">
@@ -95,5 +109,31 @@
             </tr>
         {% endfor %}
     </table>
+    <script>
+        // Récupérez la barre de recherche et le tableau des clients
+        const searchInput = document.getElementById("search-input");
+        const tableRows = document.querySelectorAll(".common-style tr");
+    
+        // Écoutez les changements dans la barre de recherche
+        searchInput.addEventListener("input", function () {
+            const searchTerm = searchInput.value.toLowerCase();
+    
+            // Parcourez chaque ligne du tableau, en commençant par la deuxième ligne (index 1)
+            for (let i = 1; i < tableRows.length; i++) {
+                const row = tableRows[i];
+                const cells = row.querySelectorAll("td");
+    
+                // Le nom et le prénom sont dans les cellules 0 et 1
+                const nomPrenom = cells[0].textContent.toLowerCase() + cells[1].textContent.toLowerCase();
+    
+                // Vérifiez si le terme de recherche est inclus dans le nom/prénom
+                if (nomPrenom.includes(searchTerm)) {
+                    row.style.display = ""; // Affiche la ligne
+                } else {
+                    row.style.display = "none"; // Masque la ligne
+                }
+            }
+        });
+    </script>
 </body>
 </html>

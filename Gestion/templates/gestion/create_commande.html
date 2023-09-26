@@ -86,14 +86,18 @@
         <label for="lieu">Lieu :</label>
         <input type="text" name="lieu" maxlength="15" required>
       </div>
+
       <div>
-        <label for="produit">Produit :</label>
-        <select name="produit">
-          {% for produit in produits %}
-            <option value="{{ produit.Id }}">{{ produit.Id }}</option>
-          {% endfor %}
-        </select>
+        <label for="recherche">Recherche de produit :</label>
+        <input name="produit" list="produits" id="recherche" oninput="filtrerProduits()" placeholder="Rechercher un produit...">
       </div>
+  
+      <datalist id="produits">
+        {% for produit in produits %}
+          <option value="{{ produit.Id }}">{{ produit.Name }}</option>
+        {% endfor %}
+      </datalist>
+
       <div>
         <label for="quantite">Quantite :</label>
         <input type="number" name="quantite" value=1 required>
@@ -136,5 +140,23 @@
       </div>
     </form>
   </div>
+  <script>
+    function filtrerProduits() {
+      var input, filter, datalist, options, option, i;
+      input = document.getElementById("recherche");
+      filter = input.value.toUpperCase();
+      datalist = document.getElementById("produits");
+      options = datalist.getElementsByTagName("option");
+  
+      for (i = 0; i < options.length; i++) {
+        option = options[i];
+        if (option.value.toUpperCase().indexOf(filter) > -1) {
+          option.style.display = "";
+        } else {
+          option.style.display = "none";
+        }
+      }
+    }
+  </script>  
 </body>
 </html>

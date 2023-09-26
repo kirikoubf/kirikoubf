@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Profile
+from functools import wraps
 from datetime import datetime
 from datetime import datetime, time
 from django.db.models import Count
@@ -20,11 +21,36 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from weasyprint import HTML
 from io import BytesIO
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.models import User  # Importez le modèle User
+from .models import Profile 
 from django.core.mail import send_mail
 from django.conf import settings
 
 User = get_user_model()
+
+
+def superadmin_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        # Vérifiez si l'utilisateur est authentifié et est un superadmin
+        if request.user.is_authenticated and request.user.is_superuser:
+            return view_func(request, *args, **kwargs)
+        else:
+            return redirect('/')
+    return _wrapped_view
+
+def gerant_or_superadmin_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        # Vérifiez si l'utilisateur est authentifié et est soit un superadmin, soit un gérant
+        if request.user.is_authenticated and (request.user.is_superuser or request.user.is_gerant):
+            return view_func(request, *args, **kwargs)
+        else:
+            return redirect('/')
+    return _wrapped_view    
+
 
 
 def login(request):
@@ -70,6 +96,7 @@ def login(request):
 
 
 @login_required(login_url   ='login')
+@superadmin_required
 def acceuil(request):
     if request.method == "GET":
         if request.user.is_superuser:
@@ -362,7 +389,7 @@ def produit(request):
         context= {"produits": produits_tries}
         return render (request, "gestion/produit.html", context=context)
 
-@login_required(login_url='login')        
+@login_required(login_url='login')      
 def create_produit(request):
     user = request.user
 
@@ -382,19 +409,11 @@ def create_produit(request):
         return redirect('/produits')
 
 
-"""def profil_produit(request):
-    user = request.user
-    if(request.method =="GET"):
-        produits=Produit.objects.all()
-        context={"produits":produit}
-        return render(request, "gestion/profil_produit", context=context)
-"""
 @login_required(login_url='login')
 def profil_produit(request, produit_id):
     if (request.method=="GET"):
         produit = get_object_or_404(Produit, Id=produit_id)
         return render(request, 'gestion/profil_produit.html', {'produit': produit})
-
 
 
 
@@ -409,6 +428,7 @@ def clients(request):
 
 
 @login_required(login_url='login')
+@superadmin_required
 def create_client(request):
     user = request.user
 
@@ -426,6 +446,7 @@ def create_client(request):
 
     return redirect("/clients")
 
+@login_required(login_url='login')
 def profil_client(request, client_id):
     if request.method =="GET":
         client = Client.objects.get(pk=client_id)
@@ -460,6 +481,7 @@ def create_depense(request):
 
 
 @login_required(login_url='login')
+@superadmin_required
 def approvision(request):
     user = request.user
 
@@ -469,6 +491,7 @@ def approvision(request):
         return render(request, "gestion/approvisions.html", context=context)
 
 @login_required(login_url='login')
+@superadmin_required
 def create_approvision(request):
     user = request.user
     if request.method == "GET":
@@ -495,6 +518,7 @@ def create_approvision(request):
 
 
 @login_required(login_url='login')
+@superadmin_required
 def depensesprivees(request):
     user = request.user
     if (request.method == "GET"):
@@ -503,6 +527,7 @@ def depensesprivees(request):
         return render (request, 'gestion/depensesprivees.html', context=context)
 
 @login_required(login_url='login')
+@superadmin_required
 def create_depenseprivee(request):
     user = request.user
     
@@ -519,6 +544,7 @@ def create_depenseprivee(request):
 
 
 @login_required(login_url='login')
+@superadmin_required
 def statistique(request):
     if (request.method == "GET"):
         produits=Produit.objects.all()
@@ -532,6 +558,7 @@ def statistique(request):
     return render(request, 'gestion/products_sold.html', {'products': products, "produits":produit})
 
 @login_required(login_url='login')
+@superadmin_required
 def users(request):
     user = request.user
     if (request.method =="GET"):
@@ -539,8 +566,11 @@ def users(request):
         context = {"users": users}
         return render(request, "gestion/users.html", context=context)
     
+
 from django.contrib.auth.models import Group
 @login_required(login_url='login')
+@superadmin_required
+
 def create_user(request):
     if request.method == "POST":
         # Récupérer les données du formulaire
@@ -553,27 +583,32 @@ def create_user(request):
         password = request.POST.get('password')
         statut = request.POST.get('statut')
 
-        try:
-            existing_user = User.objects.get(username=username)
-            return render(request, 'create_user.html', {'error': 'Nom d\'utilisateur déjà utilisé'})
-        except User.DoesNotExist:
-            user = User.objects.create_user(username=username, password=password, email=email, first_name=prenom, last_name=nom)
+        # Vérifier si un utilisateur avec cet e-mail existe déjà
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Cet e-mail est déjà utilisé.')
+        else:
+            try:
+                existing_user = User.objects.get(username=username)
+                messages.error(request, 'Nom d\'utilisateur déjà utilisé.')
+            except User.DoesNotExist:
+                user = User.objects.create_user(username=username, password=password, email=email, first_name=prenom, last_name=nom)
 
-            profile = Profile.objects.create(user=user, telephone1=telephone1, telephone2=telephone2, statut=statut)
+                profile = Profile.objects.create(user=user, telephone1=telephone1, telephone2=telephone2, statut=statut)
 
-            # Assigner l'utilisateur au groupe correspondant
-            if statut == 'livreur':
-                group = Group.objects.get(name='livreur')
-                user.groups.add(group)
-            elif statut == 'gerant':
-                group = Group.objects.get(name='gerant')
-                user.groups.add(group)
-            elif statut == 'superadmin':
-                user.is_superuser = True
-                user.is_staff = True  # Permet d'accéder à l'administration
-                user.save()
+                # Assigner l'utilisateur au groupe correspondant
+                if statut == 'livreur':
+                    group = Group.objects.get(name='livreur')
+                    user.groups.add(group)
+                elif statut == 'gerant':
+                    group = Group.objects.get(name='gerant')
+                    user.groups.add(group)
+                elif statut == 'superadmin':
+                    user.is_superuser = True
+                    user.is_staff = True  # Permet d'accéder à l'administration
+                    user.save()
 
-            return redirect('/')  # Rediriger vers la page d'accueil
+                messages.success(request, 'Utilisateur créé avec succès.')
+                return redirect('/')  # Rediriger vers la page d'accueil
 
     return render(request, 'gestion/create_user.html')  # Afficher le formulaire de création d'utilisateur
 
@@ -582,6 +617,7 @@ def create_user(request):
 
 
 
+@login_required
 def date(request):
     if request.method == "GET":
         return render(request, "gestion/form_somme.html")
@@ -591,7 +627,7 @@ def date(request):
         mois = request.POST.get('mois')
         annee = request.POST.get('annee')
         return redirect("sommes/", jour=jour, mois=mois, annee=annee)
-
+@login_required
 def somme_factures(request):
     if request.method == "GET":
         jour_etudie = 28
@@ -623,84 +659,11 @@ def somme_factures(request):
         })
 
 
-
-"""
-def date(request):
-    if request.method == "GET":
-        return render(request, "gestion/form_somme.html")
-
-    if request.method == "POST":
-        jour = request.POST.get('jour')
-        mois = request.POST.get('mois')
-        annee = request.POST.get('annee')
-        return redirect("sommes/", jour=jour, mois=mois, annee=annee)
-
-
-def somme_factures(request, jour_etudie, mois_etudie, annee_etudie):
-    jour_etudie = int(jour_etudie)
-    mois_etudie = int(mois_etudie)
-    annee_etudie = int(annee_etudie)
-
-    time_ranges = [
-        (time(8), time(18), 'sum_8_18'),
-        (time(18), time(23), 'sum_18_23')
-    ]
-
-    sums = {}
-
-    for start_time, end_time, sum_name in time_ranges:
-        filtered_factures = Facture.objects.filter(
-            date_et_heure__time__gte=start_time,
-            date_et_heure__time__lt=end_time,
-            date_et_heure__day=jour_etudie,
-            date_et_heure__month=mois_etudie,
-            date_et_heure__year=annee_etudie
-        )
-        total_amount = filtered_factures.aggregate(Sum('Montant'))
-        sums[sum_name] = total_amount['Montant__sum']
-
-    context = {
-        'sums': sums,
-        'jour_etudie': jour_etudie,
-        'mois_etudie': mois_etudie,
-        'annee_etudie': annee_etudie,
-    }
-
-    return render(request, 'gestion/sommes.html', context)
-    """
-"""
-def generate_pdf(request, facture_id):
-    # Récupérez les données de la facture depuis la base de données (Facture.objects.get...)
-    facture = Facture.objects.get(pk=facture_id)
-
-    # Récupérez le contenu HTML de la page de facture
-    template = 'profil_facture.html'
-    context = {'facture': facture}
-    html_string = render(request, template, context).content.decode('utf-8')
-
-    # Créez un objet WeasyPrint HTML à partir de la chaîne HTML
-    html = HTML(string=html_string)
-
-    # Créez un fichier temporaire pour le PDF
-    pdf_file = BytesIO()
-
-    # Générez le PDF et écrivez-le dans le fichier temporaire
-    html.write_pdf(target=pdf_file)
-
-    # Configurez la réponse HTTP pour le fichier PDF généré
-    response = HttpResponse(pdf_file.getvalue(), content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="facture_{facture_id}.pdf"'
-
-    return response
-"""
-
-
-
 from django.http import HttpResponse
 from weasyprint import HTML
 from io import BytesIO
 from django.template.loader import render_to_string  # Ajoutez cette ligne
-
+@login_required
 def pdf(request, facture_id):
     facture = Facture.objects.get(pk=facture_id)
 
@@ -719,18 +682,12 @@ def pdf(request, facture_id):
     response.write(pdf_file.getvalue())
 
     return response
-"""
-def compter(request):
-    if request.method =="GET":
-        factures = Facture.objects.all()
-        context = {"factures": factures}
-        return render (request, "gestion/compter.html", context=context)
-"""
+
 
 from django.shortcuts import render
 from .models import Facture
 from datetime import datetime, time
-
+@login_required
 def compter(request):
     if request.method == "GET":
         # Récupérez la date à partir de la requête GET
